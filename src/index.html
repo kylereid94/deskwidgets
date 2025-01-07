@@ -1,12 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en" data-theme="pastel">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>desk Widgets</title>
-    <link href="./output.css" rel="stylesheet">
-</head>
-<body>
-    <h1>Hello</h1>
-</body>
+    <link href="./output.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css"
+    />
+  </head>
+  <body>
+    <div
+      id="main"
+      class="bg-neutral min-h-screen flex items-center justify-center flex flex-col gap-6"
+    >
+      <div
+        id="header"
+        class="rounded-full bg-base-100 w-2/3 py-8 px-10 flex flex-row items-center justify-between"
+      >
+        <h1 class="text-4xl font-[800]">Desk Widgets</h1>
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="btn m-1">
+            Theme<i class="fi fi-ss-angle-small-down"></i>
+          </div>
+          <ul
+            tabindex="0"
+            class="dropdown-content bg-base-300 rounded-box z-[1] w-52 p-2 shadow-2xl"
+          >
+            <li>
+              <input
+                type="radio"
+                name="theme-dropdown"
+                class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                aria-label="Default"
+                value="default"
+              />
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="theme-dropdown"
+                class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                aria-label="Retro"
+                value="retro"
+              />
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="theme-dropdown"
+                class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                aria-label="Sunset"
+                value="sunset"
+              />
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="theme-dropdown"
+                class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                aria-label="Dracula"
+                value="dracula"
+              />
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="theme-dropdown"
+                class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                aria-label="Nord"
+                value="nord"
+              />
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="theme-dropdown"
+                class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                aria-label="Cupcake"
+                value="cupcake"
+              />
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="theme-dropdown"
+                class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                aria-label="Pastel"
+                value="pastel"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div
+        id="container"
+        class="rounded-full bg-base-100 w-2/3 p-8 grid grid-cols-3 auto-rows-auto gap-4"
+      >
+        <div
+          id="pomwidget"
+          class="bg-primary rounded-full py-10 px-10 shadow-lg border border-base-100 border-sm flex flex-row items-center gap-4 hover:scale-105 transition-transform"
+        >
+          <div class="flex flex-col">
+            <h1
+              class="text-primary brightness-[.3] text-2xl uppercase font-[700]"
+            >
+              Pomodoro
+            </h1>
+            <p class="text-base-100 text-sm mt-2">
+              Set a timer to allow for an equal balance of focus and break times
+            </p>
+          </div>
+          <div class="text-center">
+            <i
+              class="fi fi-ss-duration-alt text-primary brightness-[.3] text-6xl"
+            ></i>
+          </div>
+        </div>
+        <div
+          id="listswidget"
+          class="bg-secondary rounded-full py-10 px-10 shadow-lg border border-base-100 border-sm flex flex-row items-center gap-4 hover:scale-105 transition-transform"
+        >
+          <div class="flex flex-col">
+            <h1
+              class="text-secondary brightness-[.3] text-2xl uppercase font-[700]"
+            >
+              Lists
+            </h1>
+            <p class="text-base-100 text-sm mt-2">
+              Create categorized checklists, group lists, and track anything
+            </p>
+          </div>
+          <div class="text-center">
+            <i
+              class="fi fi-ss-completed text-primary brightness-[.3] text-6xl"
+            ></i>
+          </div>
+        </div>
+        <div
+          id="goalswidget"
+          class="bg-accent rounded-full py-10 px-10 shadow-lg border border-base-100 border-sm flex flex-row items-center gap-4 hover:scale-105 transition-transform"
+        >
+          <div class="flex flex-col">
+            <h1
+              class="text-accent brightness-[.3] text-2xl uppercase font-[700]"
+            >
+              Goals
+            </h1>
+            <p class="text-base-100 text-sm mt-2">
+              Track daily, weekly and monthly goals and earn rewards as you
+              complete them
+            </p>
+          </div>
+          <div class="text-center">
+            <i class="fi fi-ss-flag text-primary brightness-[.3] text-6xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

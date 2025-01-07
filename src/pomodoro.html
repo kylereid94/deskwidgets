@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="pastel">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pomodoro</title>
+    <link href="./output.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css"
+    />
+  </head>
+  <body>
+    <div
+      id="main"
+      class="min-h-screen bg-primary flex items-center justify-center"
+    >
+      <div
+        id="container"
+        class="bg-base-100 p-8 w-1/2 flex flex-col items-center rounded-3xl"
+      >
+        <h1 class="text-5xl font-[800] text-primary brightness-75 mb-10">
+          Pomodoro
+        </h1>
+        <div class="flex flex-row w-full">
+          <div
+            id="timer"
+            class="p-4 text-primary w-1/2 flex flex-col items-center justify-center"
+          >
+            <div
+              id="timerdial"
+              class="radial-progress text-6xl font-[700]"
+              style="--value: 100; --size: 16rem; --thickness: 1.6rem"
+              role="progressbar"
+            >
+              25:00
+            </div>
+            <div class="flex flex-row mt-8 gap-4 w-1/3">
+              <button
+                class="btn btn-md text-md text-base-100 w-full rounded-full btn-primary"
+                id="timerbutton"
+              >
+                Start/Stop
+              </button>
+            </div>
+          </div>
+          <div class="divider divider-horizontal"></div>
+          <div
+            id="settings"
+            class="w-1/2 text-center flex flex-col items-center p-4 gap-6"
+          >
+            <div>
+              <label class="text-primary brightness-[.7] text-lg"
+                >Focus Time Duration</label
+              >
+              <input
+                type="range"
+                min="15"
+                max="35"
+                value="25"
+                class="range w-full range-sm mt-2 range-primary"
+                step="5"
+                id="focusduration"
+              />
+              <div
+                class="flex w-full justify-between px-2 text-xs text-primary brightness-[.7] mt-1"
+              >
+                <span>15</span>
+                <span>20</span>
+                <span>25</span>
+                <span>30</span>
+                <span>35</span>
+              </div>
+            </div>
+            <div>
+              <label class="text-primary brightness-[.7] text-lg"
+                >Short Break Duration</label
+              >
+              <input
+                type="range"
+                min="1"
+                max="9"
+                value="5"
+                class="range w-full range-sm mt-2 range-primary"
+                step="2"
+                id="shortduration"
+              />
+              <div
+                class="flex w-full justify-between px-2 text-xs text-primary brightness-[.7] mt-1"
+              >
+                <span>1</span>
+                <span>3</span>
+                <span>5</span>
+                <span>7</span>
+                <span>9</span>
+              </div>
+            </div>
+            <div>
+              <label class="text-primary brightness-[.7] text-lg"
+                >Long Break Duration</label
+              >
+              <input
+                type="range"
+                min="5"
+                max="25"
+                value="15"
+                class="range w-full range-sm mt-2 range-primary"
+                step="5"
+                id="longduration"
+              />
+              <div
+                class="flex w-full justify-between px-2 text-xs text-primary brightness-[.7] mt-1"
+              >
+                <span>5</span>
+                <span>10</span>
+                <span>15</span>
+                <span>20</span>
+                <span>25</span>
+              </div>
+            </div>
+            <div>
+              <label class="text-primary brightness-[.7] text-lg"
+                >Repetitions</label
+              ><br />
+              <input
+                type="text"
+                id="repcount"
+                class="input input-sm input-bordered border-primary border-2 text-center"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/src/pomodoro.js"></script>
+  </body>
+</html>

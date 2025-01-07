@@ -39,14 +39,14 @@
               style="--value: 100; --size: 16rem; --thickness: 1.6rem"
               role="progressbar"
             >
-              25:00
+              <span id="timertime">00:00</span>
             </div>
             <div class="flex flex-row mt-8 gap-4 w-1/3">
               <button
                 class="btn btn-md text-md text-base-100 w-full rounded-full btn-primary"
                 id="timerbutton"
               >
-                Start/Stop
+                Start
               </button>
             </div>
           </div>
@@ -138,6 +138,152 @@
         </div>
       </div>
     </div>
-    <script src="/src/pomodoro.js"></script>
+    <script>
+      // Select elements
+      const focusInput = document.getElementById("focusduration");
+      const shortBreakInput = document.getElementById("shortduration");
+      const longBreakInput = document.getElementById("longduration");
+      const repCountInput = document.getElementById("repcount");
+      const timerDial = document.getElementById("timerdial");
+      const timerTime = document.getElementById("timertime");
+      const timerButton = document.getElementById("timerbutton");
+
+      // Check if all elements exist
+      if (
+        !focusInput ||
+        !shortBreakInput ||
+        !longBreakInput ||
+        !repCountInput ||
+        !timerDial ||
+        !timerTime ||
+        !timerButton
+      ) {
+        console.error("One or more elements are missing. Check your HTML IDs.");
+      } else {
+        console.log("All elements found successfully.");
+      }
+
+      // Variables
+      let timerInterval = null;
+      let isPaused = false;
+      let currentRep = 1;
+      let isFocus = true; // Tracks whether it's a focus or break session
+      let remainingTime = 0;
+
+      // Helper function to convert minutes to seconds
+      function minutesToSeconds(minutes) {
+        console.log(`Converting ${minutes} minutes to seconds.`);
+        return minutes * 60;
+      }
+
+      // Helper function to format time as MM:SS
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, "0")}:${secs
+          .toString()
+          .padStart(2, "0")}`;
+      }
+
+      // Update radial progress bar
+      function updateRadialProgress(totalTime, remainingTime) {
+        const progress = (remainingTime / totalTime) * 100; // Calculate percentage remaining
+        console.log(`Updating progress: ${progress}% remaining`);
+        timerDial.style.setProperty("--value", progress); // Update the radial progress value
+      }
+
+      // Start the timer
+      function startTimer(duration) {
+        console.log(`Starting timer for ${duration} seconds.`);
+        let totalTime = duration; // Save the original duration
+        remainingTime = duration;
+
+        // Initialize radial progress and text
+        updateRadialProgress(totalTime, remainingTime);
+        timerTime.textContent = formatTime(remainingTime);
+
+        timerInterval = setInterval(() => {
+          if (!isPaused) {
+            remainingTime -= 1;
+            console.log(`Remaining time: ${remainingTime}s`);
+            timerTime.textContent = formatTime(remainingTime);
+            updateRadialProgress(totalTime, remainingTime);
+
+            if (remainingTime <= 0) {
+              clearInterval(timerInterval);
+              console.log("Timer completed. Switching to next session.");
+              switchToNextTimer();
+            }
+          }
+        }, 1000);
+      }
+
+      // Switch to the next timer based on the pattern
+      function switchToNextTimer() {
+        console.log(
+          `Switching timer. Current rep: ${currentRep}, IsFocus: ${isFocus}`
+        );
+        if (isFocus) {
+          if (currentRep === parseInt(repCountInput.value)) {
+            // Final rep, switch to long break
+            startTimer(minutesToSeconds(parseInt(longBreakInput.value)));
+          } else {
+            // Switch to short break
+            startTimer(minutesToSeconds(parseInt(shortBreakInput.value)));
+          }
+          isFocus = false;
+        } else {
+          // Return to focus session
+          currentRep++;
+          if (currentRep > parseInt(repCountInput.value)) {
+            resetTimer(); // Reset the timer if all reps are completed
+            return;
+          }
+          startTimer(minutesToSeconds(parseInt(focusInput.value)));
+          isFocus = true;
+        }
+      }
+
+      // Reset the timer
+      function resetTimer() {
+        console.log("Resetting timer.");
+        clearInterval(timerInterval);
+        timerInterval = null;
+        currentRep = 1;
+        isFocus = true;
+        remainingTime = 0;
+        timerButton.textContent = "Start";
+        timerTime.textContent = "00:00";
+        updateRadialProgress(1, 0);
+      }
+
+      // Button click handler
+      timerButton.addEventListener("click", () => {
+        const buttonState = timerButton.textContent.trim(); // Trim extra whitespace
+        console.log(`Timer button clicked. Current state: ${buttonState}`);
+
+        if (buttonState === "Start") {
+          // Start the timer
+          const focusDuration = parseInt(focusInput.value);
+          if (isNaN(focusDuration) || focusDuration <= 0) {
+            alert("Please enter a valid focus duration.");
+            return;
+          }
+          console.log("Starting focus timer.");
+          startTimer(minutesToSeconds(focusDuration));
+          timerButton.textContent = "Pause";
+        } else if (buttonState === "Pause") {
+          // Pause the timer
+          isPaused = true;
+          timerButton.textContent = "Resume";
+          console.log("Timer paused.");
+        } else if (buttonState === "Resume") {
+          // Resume the timer
+          isPaused = false;
+          timerButton.textContent = "Pause";
+          console.log("Timer resumed.");
+        }
+      });
+    </script>
   </body>
 </html>

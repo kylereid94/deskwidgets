@@ -23,8 +23,14 @@
     >
       <div
         id="container"
-        class="bg-base-100 p-8 w-1/2 flex flex-col items-center rounded-3xl"
+        class="bg-base-100 p-8 w-1/2 flex flex-col items-center rounded-3xl relative"
       >
+        <button
+          class="btn btn-primary btn-circle text-base-100 absolute top-8 left-8 pt-1"
+          onclick="window.location.href='/src/index.html'"
+        >
+          <i class="fi fi-ss-angle-left"></i>
+        </button>
         <h1 class="text-5xl font-[800] text-primary brightness-75 mb-10">
           Pomodoro
         </h1>
@@ -131,13 +137,16 @@
               <input
                 type="text"
                 id="repcount"
-                class="input input-sm input-bordered border-primary border-2 text-center"
+                class="input input-sm input-bordered border-primary border-2 text-center w-32"
+                placeholder="# of Reps"
+                value="4"
               />
             </div>
           </div>
         </div>
       </div>
     </div>
+    <script src="/src/theme.js"></script>
     <script>
       // Select elements
       const focusInput = document.getElementById("focusduration");
@@ -190,6 +199,26 @@
         const progress = (remainingTime / totalTime) * 100; // Calculate percentage remaining
         console.log(`Updating progress: ${progress}% remaining`);
         timerDial.style.setProperty("--value", progress); // Update the radial progress value
+      }
+
+      // Disable input fields
+      function disableInputs() {
+        [focusInput, shortBreakInput, longBreakInput, repCountInput].forEach(
+          (input) => {
+            input.setAttribute("disabled", true); // Disable the input field
+            input.classList.add("opacity-50", "cursor-not-allowed"); // Add Tailwind classes for visual feedback
+          }
+        );
+      }
+
+      // Enable input fields (if needed for reset or user actions)
+      function enableInputs() {
+        [focusInput, shortBreakInput, longBreakInput, repCountInput].forEach(
+          (input) => {
+            input.removeAttribute("disabled"); // Enable the input field
+            input.classList.remove("opacity-50", "cursor-not-allowed"); // Remove Tailwind classes for visual feedback
+          }
+        );
       }
 
       // Start the timer
@@ -255,6 +284,7 @@
         timerButton.textContent = "Start";
         timerTime.textContent = "00:00";
         updateRadialProgress(1, 0);
+        enableInputs(); // Enable the input fields after reset
       }
 
       // Button click handler
@@ -272,6 +302,7 @@
           console.log("Starting focus timer.");
           startTimer(minutesToSeconds(focusDuration));
           timerButton.textContent = "Pause";
+          disableInputs(); // Disable inputs when the timer starts
         } else if (buttonState === "Pause") {
           // Pause the timer
           isPaused = true;

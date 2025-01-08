@@ -2996,8 +2996,8 @@ html {
   width: 33.333333%;
 }
 
-.w-2\/3 {
-  width: 66.666667%;
+.w-3\/4 {
+  width: 75%;
 }
 
 .w-52 {
@@ -3008,8 +3008,8 @@ html {
   width: 100%;
 }
 
-.w-3\/4 {
-  width: 75%;
+.w-2\/3 {
+  width: 66.666667%;
 }
 
 .w-32 {
@@ -3030,10 +3030,6 @@ html {
 
 .auto-rows-auto {
   grid-auto-rows: auto;
-}
-
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .grid-cols-2 {
@@ -3521,15 +3517,21 @@ html {
   visibility: visible;
 }
 
+.has-\[\:disabled\]\:invisible:has(:disabled) {
+  visibility: hidden;
+}
+
+.has-\[\:disabled\]\:hidden:has(:disabled) {
+  display: none;
+}
+
+.has-\[\:disabled\]\:w-0:has(:disabled) {
+  width: 0px;
+}
+
 @media (min-width: 768px) {
   .md\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .lg\:w-2\/3 {
-    width: 66.666667%;
   }
 }
 

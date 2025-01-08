@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="pastel">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lists</title>
+    <link href="./output.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css"
+    />
+    <style>
+      #sidebar li {
+        padding: 1rem 1rem 1rem 2rem;
+        font-weight: 400;
+      }
+
+      #sidebar li:nth-child(odd) {
+        background-color: oklch(var(--b1));
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="main"
+      class="h-screen bg-secondary flex items-center justify-center flex-col p-8 gap-8"
+    >
+      <div
+        id="header"
+        class="bg-base-100 w-3/4 2xl:w-2/3 flex items-center justify-center text-4xl p-6 rounded-full relative"
+      >
+        <button
+          class="btn btn-secondary btn-circle text-base-100 absolute top-5 left-8 pt-1"
+          onclick="window.location.href='/src/index.html'"
+        >
+          <i class="fi fi-ss-angle-left"></i>
+        </button>
+        <h1 class="uppercase font-[700]">Lists</h1>
+      </div>
+      <div
+        id="container"
+        class="bg-base-100 flex flex-row flex-grow w-3/4 2xl:w-2/3 rounded-[70px] p-2"
+      >
+        <div
+          id="sidebar"
+          class="bg-secondary/25 rounded-l-[65px] flex flex-col"
+        >
+          <div
+            class="flex flex-row w-full items-center justify-center gap-2 pl-8 pr-4 pt-8 pb-4"
+          >
+            <input
+              type="text"
+              id="searchBar"
+              class="input input-sm flex flex-grow"
+              placeholder="Search lists..."
+            />
+            <button
+              id="sortButton"
+              class="btn btn-sm btn-circle btn-secondary flex pt-1"
+            >
+              <i class="fi fi-ss-sort-alpha-down"></i>
+            </button>
+          </div>
+          <ul id="listMenu" class="w-full mt-4"></ul>
+        </div>
+        <div
+          id="listMain"
+          class="bg-base-100 flex-grow rounded-r-[65px] relative px-8 py-4"
+        >
+          <button
+            id="addListButton"
+            class="absolute top-6 right-8 btn btn-circle btn-secondary text-xl"
+          >
+            +
+          </button>
+          <input
+            type="text"
+            id="listTitle"
+            class="disabled:placeholder:invisible disabled:bg-transparent input input-lg w-3/4 input-bordered input-ghost bg-transparent active:text-secondary text-secondary brightness-[.7] border-0 active:border-b-2 border-secondary rounded-none text-2xl pl-0"
+            placeholder="List Title"
+          />
+          <ul id="listItems" class="flex flex-col"></ul>
+          <button
+            id="addItemButton"
+            class="btn btn-rounded btn-secondary btn-sm mt-4"
+          >
+            + Add Item
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="/src/theme.js"></script>
+    <script>
+      const searchBar = document.getElementById("searchBar");
+      const sortButton = document.getElementById("sortButton");
+      const listMenu = document.getElementById("listMenu");
+      const addListButton = document.getElementById("addListButton");
+      const listTitle = document.getElementById("listTitle");
+      const listItems = document.getElementById("listItems");
+      const addItemButton = document.getElementById("addItemButton");
+
+      let lists = JSON.parse(localStorage.getItem("lists")) || [];
+      let activeList = null;
+
+      function saveToLocalStorage() {
+        localStorage.setItem("lists", JSON.stringify(lists));
+      }
+
+      function renderListMenu() {
+        listMenu.innerHTML = "";
+        const filteredLists = lists.filter((list) =>
+          list.name.toLowerCase().includes(searchBar.value.toLowerCase())
+        );
+
+        filteredLists.forEach((list, index) => {
+          const li = document.createElement("li");
+          li.classList.add("flex", "items-center", "group");
+
+          // Set list name and handle list selection
+          const listName = document.createElement("span");
+          listName.textContent = list.name;
+          listName.classList.add("flex", "flex-grow");
+          listName.onclick = () => selectList(index);
+
+          // Delete button
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "X";
+          deleteButton.classList.add(
+            "btn",
+            "btn-ghost",
+            "hover:bg-transparent",
+            "btn-circle",
+            "btn-sm",
+            "invisible",
+            "group-hover:visible",
+            "opacity-50"
+          );
+          deleteButton.onclick = (e) => {
+            e.stopPropagation(); // Prevent list selection when clicking delete
+            lists.splice(index, 1);
+            if (activeList === index) activeList = null; // Clear activeList if it's the one being deleted
+            saveToLocalStorage();
+            renderListMenu();
+            renderActiveList();
+          };
+
+          // Highlight active list
+          if (activeList === index) {
+            li.style.backgroundColor = "oklch(var(--s))";
+          }
+
+          // Append elements to the list item
+          li.appendChild(listName);
+          li.appendChild(deleteButton);
+
+          // Append the list item to the menu
+          listMenu.appendChild(li);
+        });
+      }
+
+      function renderActiveList() {
+        if (activeList === null) return;
+        const currentList = lists[activeList];
+        listTitle.value = currentList.name;
+        listItems.innerHTML = "";
+
+        currentList.items.forEach((item, index) => {
+          const li = document.createElement("li");
+          li.classList.add(
+            "flex",
+            "items-center",
+            "group",
+            "gap-4",
+            "border",
+            "border-0",
+            "border-b-2",
+            "border-secondary",
+            "py-2"
+          );
+
+          // Create and style the checkbox
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = item.completed;
+          checkbox.classList.add("checkbox", "checkbox-secondary");
+          checkbox.onchange = () => {
+            item.completed = checkbox.checked;
+            saveToLocalStorage();
+          };
+
+          // Create and style the input for item text
+          const input = document.createElement("input");
+          input.type = "text";
+          input.value = item.text;
+          input.classList.add(
+            "flex",
+            "flex-grow",
+            "input",
+            "input-ghost",
+            "bg-transparent",
+            "text-secondary",
+            "brightness-[.5]",
+            "text-lg",
+            "pl-0"
+          );
+          input.oninput = () => {
+            currentList.items[index].text = input.value;
+            saveToLocalStorage();
+          };
+
+          // Create and style the delete button
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.classList.add(
+            "btn",
+            "btn-secondary",
+            "btn-sm",
+            "invisible",
+            "group-hover:visible"
+          );
+          deleteButton.onclick = () => {
+            currentList.items.splice(index, 1);
+            saveToLocalStorage();
+            renderActiveList();
+          };
+
+          // Append elements to the list item
+          li.appendChild(checkbox);
+          li.appendChild(input); // Replaced span with input
+          li.appendChild(deleteButton);
+
+          // Append the list item to the list
+          listItems.appendChild(li);
+        });
+      }
+
+      function selectList(index) {
+        activeList = index;
+        renderActiveList();
+        renderListMenu();
+      }
+
+      addListButton.onclick = () => {
+        const newList = { name: "", items: [] };
+        lists.push(newList);
+        activeList = lists.length - 1;
+        saveToLocalStorage();
+        renderListMenu();
+        renderActiveList();
+      };
+
+      listTitle.oninput = () => {
+        if (activeList === null) return;
+        lists[activeList].name = listTitle.value;
+        saveToLocalStorage();
+        renderListMenu();
+      };
+
+      addItemButton.onclick = () => {
+        if (activeList === null) return;
+        lists[activeList].items.push({ text: "", completed: false });
+        saveToLocalStorage();
+        renderActiveList();
+      };
+
+      sortButton.onclick = () => {
+        lists.sort((a, b) => a.name.localeCompare(b.name));
+        saveToLocalStorage();
+        renderListMenu();
+      };
+
+      searchBar.oninput = renderListMenu;
+
+      // Initial render
+      renderListMenu();
+      if (lists.length > 0) selectList(0);
+    </script>
+  </body>
+</html>
